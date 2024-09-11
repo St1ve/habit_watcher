@@ -1,4 +1,16 @@
 [versions]
+#app_configs
+applicationId = "com.razvictor.habitwatcher"
+namespace = "com.razvictor.habitwatcher"
+compileSdk = "34"
+minSdk = "24"
+targetSdk = "34"
+versionCode = "1"
+versionName = "1.0"
+jvmTarget = "1.8"
+kotlinCompilerExtensionVersion = "1.5.1"
+
+#Library versions
 agp = "8.6.0"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
