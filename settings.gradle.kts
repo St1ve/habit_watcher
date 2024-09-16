@@ -20,5 +20,7 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Habit Watcher"
-include(":app")
- 
+include(
+    ":app",
+    ":core:uikit"
+)
