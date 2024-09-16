@@ -1,4 +1,4 @@
-package com.example.compose
+package com.razvictor.habitwatcher.uikit
 
 import androidx.compose.ui.graphics.Color
 
