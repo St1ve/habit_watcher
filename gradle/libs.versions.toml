@@ -1,6 +1,7 @@
 [versions]
 #app_configs
 applicationId = "com.razvictor.habitwatcher"
+gradle = "8.6.0"
 namespace = "com.razvictor.habitwatcher"
 compileSdk = "34"
 minSdk = "24"
@@ -24,6 +25,7 @@ uiTextGoogleFonts = "1.7.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

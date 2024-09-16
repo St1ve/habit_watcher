@@ -1,5 +1,6 @@
+rootProject.name = "gradle-plugins"
+
 pluginManagement {
-    includeBuild("gradle-plugins")
     repositories {
         google {
             content {
@@ -12,16 +13,16 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
     }
+    versionCatalogs {
+        create("libs") {
+            from(files("../gradle/libs.versions.toml"))
+        }
+    }
 }
-
-rootProject.name = "Habit Watcher"
-include(
-    ":app",
-    ":core:uikit",
-)
