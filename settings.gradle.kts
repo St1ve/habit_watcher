@@ -24,4 +24,5 @@ include(
     ":app",
     ":core:uikit",
     ":core:di",
+    ":features:habitlist",
 )
