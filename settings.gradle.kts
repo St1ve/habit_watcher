@@ -25,4 +25,5 @@ include(
     ":core:uikit",
     ":core:di",
     ":features:habitlist",
+    ":features:root",
 )
