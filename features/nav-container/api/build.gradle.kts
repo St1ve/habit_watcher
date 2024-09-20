@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "${libs.versions.namespace.get()}.features.habitlist"
+    namespace = "${libs.versions.namespace.get()}.features.nav_container.api"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
@@ -51,7 +51,11 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.text.google.fonts)
+    implementation(libs.decompose)
+    implementation(libs.extension.decompose)
+
     androidTestImplementation(platform(libs.androidx.compose.bom))
+
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }

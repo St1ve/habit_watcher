@@ -23,6 +23,7 @@ composeBom = "2024.09.00"
 uiTextGoogleFonts = "1.7.0"
 serialization = "1.6.0"
 decompose = "3.1.0"
+dagger = "2.52"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -43,10 +44,12 @@ androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
 extension-decompose = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decompose" }
+dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger" }
+dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "dagger" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }

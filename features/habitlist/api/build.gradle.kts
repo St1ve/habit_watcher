@@ -1,14 +1,10 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.serialization)
-    // FIXME: Разобраться с подключением kapt плагина из toml
-//    alias(libs.plugins.kotlin.kapt)
-    id("kotlin-kapt")
 }
 
 android {
-    namespace = "${libs.versions.namespace.get()}.features.root"
+    namespace = "${libs.versions.namespace.get()}.features.habitlist.api"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
@@ -46,12 +42,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":features:nav-container:api"))
-    implementation(project(":features:nav-container:impl"))
 
-    implementation(libs.decompose)
-    implementation(libs.extension.decompose)
-    implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -60,11 +51,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.text.google.fonts)
-    implementation(libs.dagger)
-    kapt(libs.dagger.compiler)
-
     androidTestImplementation(platform(libs.androidx.compose.bom))
-
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }

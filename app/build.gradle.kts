@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    id("kotlin-kapt")
 }
 
 android {
@@ -52,7 +53,10 @@ android {
 
 dependencies {
     implementation(project(":core:uikit"))
-    implementation(project(":features:habitlist"))
+    implementation(project(":features:habitlist:api"))
+    implementation(project(":features:habitlist:impl"))
+    implementation(project(":features:nav-container:api"))
+    implementation(project(":features:nav-container:impl"))
     implementation(project(":features:root"))
 
     implementation(libs.androidx.core.ktx)
@@ -67,6 +71,8 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.decompose)
     implementation(libs.extension.decompose)
+    implementation(libs.dagger)
+    kapt(libs.dagger.compiler)
 
     testImplementation(libs.junit)
 

@@ -24,6 +24,9 @@ include(
     ":app",
     ":core:uikit",
     ":core:di",
-    ":features:habitlist",
+    ":features:habitlist:api",
+    ":features:habitlist:impl",
     ":features:root",
+    ":features:nav-container:api",
+    ":features:nav-container:impl",
 )
