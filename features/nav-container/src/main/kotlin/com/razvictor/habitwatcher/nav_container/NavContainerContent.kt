@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.razvictor.habitwatcher.features.nav_container.R
+import com.razvictor.habitwatcher.habitlist.HabitListContent
 
 @Composable
 fun NavContainerContent(
@@ -60,7 +61,7 @@ fun NavContainerContent(
             modifier = modifier.padding(innerPadding),
         ) {
             when (val child = it.instance) {
-                is NavContainerComponent.Child.List -> TODO()
+                is NavContainerComponent.Child.List -> HabitListContent(child.component)
                 is NavContainerComponent.Child.Statistics -> TODO()
             }
         }

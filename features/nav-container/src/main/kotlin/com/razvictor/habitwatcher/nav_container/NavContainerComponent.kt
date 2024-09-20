@@ -3,6 +3,7 @@ package com.razvictor.habitwatcher.nav_container
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
+import com.razvictor.habitwatcher.habitlist.HabitListComponent
 import kotlin.reflect.KClass
 
 interface NavContainerComponent {
@@ -12,7 +13,7 @@ interface NavContainerComponent {
     fun onTabSelected(tabId: KClass<out Child>)
 
     sealed class Child {
-        data object List : Child()
+        data class List(val component: HabitListComponent) : Child()
         data object Statistics : Child()
     }
 

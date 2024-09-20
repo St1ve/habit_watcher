@@ -4,9 +4,11 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
+import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.update
+import com.razvictor.habitwatcher.habitlist.HabitListComponent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -15,6 +17,7 @@ import kotlin.reflect.KClass
 
 class DefaultNavContainerComponent @AssistedInject internal constructor(
     @Assisted componentContext: ComponentContext,
+    private val habitListComponentFactory: HabitListComponent.Factory,
 ) : NavContainerComponent, ComponentContext by componentContext {
 
     private val _uiState: MutableValue<NavContainerUiState> = MutableValue(
@@ -37,6 +40,12 @@ class DefaultNavContainerComponent @AssistedInject internal constructor(
         _uiState.update { currentState ->
             NavContainerUiState(currentState.tabs.map { tab -> tab.copy(isSelected = tab.id == tabId) })
         }
+        val config = when (tabId) {
+            NavContainerComponent.Child.List::class -> Config.List
+            NavContainerComponent.Child.Statistics::class -> Config.Statistics
+            else -> error("Unknown tabId: $tabId")
+        }
+        nav.push(config)
     }
 
     private val nav = StackNavigation<Config>()
@@ -50,7 +59,7 @@ class DefaultNavContainerComponent @AssistedInject internal constructor(
     )
 
     private fun child(config: Config, context: ComponentContext): NavContainerComponent.Child = when (config) {
-        is Config.List -> NavContainerComponent.Child.List
+        is Config.List -> NavContainerComponent.Child.List(habitListComponentFactory(context))
         is Config.Statistics -> NavContainerComponent.Child.Statistics
     }
 
