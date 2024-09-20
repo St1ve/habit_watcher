@@ -1,33 +1,68 @@
 package com.razvictor.habitwatcher.nav_container
 
-import android.util.Log
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.arkivanov.decompose.extensions.compose.stack.Children
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import com.razvictor.habitwatcher.features.nav_container.impl.R
 
 @Composable
 fun NavContainerContent(
     component: NavContainerComponent,
     modifier: Modifier = Modifier,
 ) {
+    val uiState by component.uiState.subscribeAsState()
+
     Scaffold(
-        modifier = modifier.fillMaxSize(),
         bottomBar = {
-            Tab(
-                selected = true,
-                onClick = { Log.d("MyTest", "OnTabClick: NavContainerContent: ") /* TODO: Remove */ }
-            )
+            NavigationBar {
+                uiState.tabs.forEachIndexed { index, tab ->
+                    val (label, icon) = when (tab.id) {
+                        NavContainerComponent.Child.List::class -> {
+                            stringResource(R.string.tab_list) to Icons.Filled.Home
+                        }
+
+                        NavContainerComponent.Child.Statistics::class -> {
+                            stringResource(R.string.tab_statistics) to Icons.Filled.Info
+                        }
+
+                        else -> error("Unknown id: ${tab.id}")
+                    }
+
+                    NavigationBarItem(
+                        icon = {
+                            when (tab.id) {
+                                NavContainerComponent.Child.List::class -> Icon(icon, contentDescription = null)
+                                NavContainerComponent.Child.Statistics::class -> Icon(icon, contentDescription = null)
+                            }
+                        },
+                        label = { Text(label) },
+                        selected = tab.isSelected,
+                        onClick = { component.onTabSelected(tab.id) }
+                    )
+                }
+            }
         }
     ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
+        Children(
+            stack = component.stack,
+            modifier = modifier.padding(innerPadding),
         ) {
-            Text(text = "My test text")
+            when (val child = it.instance) {
+                is NavContainerComponent.Child.List -> TODO()
+                is NavContainerComponent.Child.Statistics -> TODO()
+            }
         }
     }
 }
