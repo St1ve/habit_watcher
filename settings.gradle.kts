@@ -26,7 +26,6 @@ include(
     ":core:di",
     ":features:habitlist:api",
     ":features:habitlist:impl",
+    ":features:nav-container",
     ":features:root",
-    ":features:nav-container:api",
-    ":features:nav-container:impl",
 )

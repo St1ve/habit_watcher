@@ -55,8 +55,7 @@ dependencies {
     implementation(project(":core:uikit"))
     implementation(project(":features:habitlist:api"))
     implementation(project(":features:habitlist:impl"))
-    implementation(project(":features:nav-container:api"))
-    implementation(project(":features:nav-container:impl"))
+    implementation(project(":features:nav-container"))
     implementation(project(":features:root"))
 
     implementation(libs.androidx.core.ktx)

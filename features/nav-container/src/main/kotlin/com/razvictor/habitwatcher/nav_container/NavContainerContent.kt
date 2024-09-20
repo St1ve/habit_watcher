@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.razvictor.habitwatcher.features.nav_container.impl.R
+import com.razvictor.habitwatcher.features.nav_container.R
 
 @Composable
 fun NavContainerContent(

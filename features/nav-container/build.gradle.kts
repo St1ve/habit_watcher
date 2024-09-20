@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "${libs.versions.namespace.get()}.features.nav_container.impl"
+    namespace = "${libs.versions.namespace.get()}.features.nav_container"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
@@ -44,8 +44,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":features:nav-container:api"))
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))

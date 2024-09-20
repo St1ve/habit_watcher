@@ -46,8 +46,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":features:nav-container:api"))
-    implementation(project(":features:nav-container:impl"))
+    implementation(project(":features:nav-container"))
 
     implementation(libs.decompose)
     implementation(libs.extension.decompose)
