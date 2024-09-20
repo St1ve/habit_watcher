@@ -53,8 +53,7 @@ android {
 
 dependencies {
     implementation(project(":core:uikit"))
-    implementation(project(":features:habitlist:api"))
-    implementation(project(":features:habitlist:impl"))
+    implementation(project(":features:habitlist"))
     implementation(project(":features:nav-container"))
     implementation(project(":features:root"))
 
