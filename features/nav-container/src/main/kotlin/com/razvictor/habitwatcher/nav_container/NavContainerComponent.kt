@@ -4,6 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
 import com.razvictor.habitwatcher.habitlist.HabitListComponent
+import com.razvictor.habitwatcher.statistics.StatisticsComponent
 import kotlin.reflect.KClass
 
 interface NavContainerComponent {
@@ -14,7 +15,7 @@ interface NavContainerComponent {
 
     sealed class Child {
         data class List(val component: HabitListComponent) : Child()
-        data object Statistics : Child()
+        data class Statistics(val component: StatisticsComponent) : Child()
     }
 
     fun interface Factory {

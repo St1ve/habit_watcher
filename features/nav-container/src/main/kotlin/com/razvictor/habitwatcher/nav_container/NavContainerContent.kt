@@ -17,6 +17,7 @@ import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.razvictor.habitwatcher.features.nav_container.R
 import com.razvictor.habitwatcher.habitlist.HabitListContent
+import com.razvictor.habitwatcher.statistics.StatisticsContent
 
 @Composable
 fun NavContainerContent(
@@ -62,7 +63,7 @@ fun NavContainerContent(
         ) {
             when (val child = it.instance) {
                 is NavContainerComponent.Child.List -> HabitListContent(child.component)
-                is NavContainerComponent.Child.Statistics -> TODO()
+                is NavContainerComponent.Child.Statistics -> StatisticsContent(child.component)
             }
         }
     }

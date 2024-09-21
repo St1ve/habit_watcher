@@ -3,12 +3,15 @@ package com.razvictor.habitwatcher.nav_container
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
+import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.push
+import com.arkivanov.decompose.router.stack.replaceCurrent
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.update
 import com.razvictor.habitwatcher.habitlist.HabitListComponent
+import com.razvictor.habitwatcher.statistics.StatisticsComponent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -18,6 +21,7 @@ import kotlin.reflect.KClass
 class DefaultNavContainerComponent @AssistedInject internal constructor(
     @Assisted componentContext: ComponentContext,
     private val habitListComponentFactory: HabitListComponent.Factory,
+    private val statisticsComponentFactory: StatisticsComponent.Factory,
 ) : NavContainerComponent, ComponentContext by componentContext {
 
     private val _uiState: MutableValue<NavContainerUiState> = MutableValue(
@@ -60,7 +64,7 @@ class DefaultNavContainerComponent @AssistedInject internal constructor(
 
     private fun child(config: Config, context: ComponentContext): NavContainerComponent.Child = when (config) {
         is Config.List -> NavContainerComponent.Child.List(habitListComponentFactory(context))
-        is Config.Statistics -> NavContainerComponent.Child.Statistics
+        is Config.Statistics -> NavContainerComponent.Child.Statistics(statisticsComponentFactory(context))
     }
 
     @Serializable

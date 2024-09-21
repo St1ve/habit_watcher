@@ -27,4 +27,5 @@ include(
     ":features:habitlist",
     ":features:nav-container",
     ":features:root",
+    ":features:statistics",
 )
