@@ -45,7 +45,7 @@ class DefaultNavContainerComponent @AssistedInject internal constructor(
             NavContainerComponent.Child.Statistics::class -> Config.Statistics
             else -> error("Unknown tabId: $tabId")
         }
-        nav.push(config)
+        nav.bringToFront(config)
     }
 
     private val nav = StackNavigation<Config>()
