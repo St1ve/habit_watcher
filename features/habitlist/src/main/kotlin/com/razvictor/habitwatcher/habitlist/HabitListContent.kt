@@ -89,7 +89,7 @@ fun HabitListContent(
 }
 
 @Composable
-fun EmptyList(modifier: Modifier = Modifier) {
+private fun EmptyList(modifier: Modifier = Modifier) {
     Box(modifier.fillMaxSize()) {
         Text(
             text = stringResource(R.string.empty_list),
@@ -121,7 +121,7 @@ private fun HabitList(
 }
 
 @Composable
-fun HabitCard(
+private fun HabitCard(
     habitState: HabitUiState,
     modifier: Modifier = Modifier
 ) {
@@ -151,7 +151,7 @@ fun HabitCard(
 }
 
 @Composable
-fun ActionButton(
+private fun ActionButton(
     toggled: Boolean,
     onActionToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier
