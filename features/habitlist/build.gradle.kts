@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "${libs.versions.namespace.get()}.features.habitlist.impl"
+    namespace = "${libs.versions.namespace.get()}.features.habitlist"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
