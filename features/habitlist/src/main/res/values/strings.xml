@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_button_toggled_label">Done</string>
+    <string name="action_button_untoggle_label">Mark Done</string>
+    <string name="empty_list">You have no habits yet.</string>
+</resources>
