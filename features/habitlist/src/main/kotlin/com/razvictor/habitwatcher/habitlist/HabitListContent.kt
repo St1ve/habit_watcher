@@ -36,7 +36,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.razvictor.habitwatcher.features.habitlist.impl.R
+import com.razvictor.habitwatcher.features.habitlist.R
 import com.razvictor.habitwatcher.habitlist.HabitListUiState.HabitUiState
 
 @Composable
@@ -68,7 +68,7 @@ fun HabitListContent(
                 exit = slideOutVertically(targetOffsetY = { it * 2 }),
             ) {
                 FloatingActionButton(
-                    onClick = { /*FIXME: Implement */ },
+                    onClick = { component.onNewHabitClick() },
                 ) {
                     Icon(imageVector = Icons.Filled.Add, contentDescription = null)
                 }

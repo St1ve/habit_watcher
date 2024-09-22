@@ -11,6 +11,7 @@ import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.update
 import com.razvictor.habitwatcher.habitlist.HabitListComponent
+import com.razvictor.habitwatcher.new_habit.NewHabitComponent
 import com.razvictor.habitwatcher.statistics.StatisticsComponent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -22,8 +23,10 @@ class DefaultNavContainerComponent @AssistedInject internal constructor(
     @Assisted componentContext: ComponentContext,
     private val habitListComponentFactory: HabitListComponent.Factory,
     private val statisticsComponentFactory: StatisticsComponent.Factory,
+    @Assisted private val onNewHabitClick: () -> Unit,
 ) : NavContainerComponent, ComponentContext by componentContext {
 
+    // FIXME: Save state on configuration changed
     private val _uiState: MutableValue<NavContainerUiState> = MutableValue(
         NavContainerUiState(
             tabs = listOf(
@@ -54,6 +57,7 @@ class DefaultNavContainerComponent @AssistedInject internal constructor(
 
     private val nav = StackNavigation<Config>()
 
+    // FIXME: Remove stack
     override val stack: Value<ChildStack<*, NavContainerComponent.Child>> = childStack(
         source = nav,
         initialConfiguration = Config.List,
@@ -63,9 +67,15 @@ class DefaultNavContainerComponent @AssistedInject internal constructor(
     )
 
     private fun child(config: Config, context: ComponentContext): NavContainerComponent.Child = when (config) {
-        is Config.List -> NavContainerComponent.Child.List(habitListComponentFactory(context))
+        is Config.List -> NavContainerComponent.Child.List(habitListComponent(context))
         is Config.Statistics -> NavContainerComponent.Child.Statistics(statisticsComponentFactory(context))
     }
+
+    private fun habitListComponent(context: ComponentContext): HabitListComponent =
+        habitListComponentFactory(
+            componentContext = context,
+            onNewHabitClick = onNewHabitClick,
+        )
 
     @Serializable
     private sealed interface Config {
@@ -79,6 +89,9 @@ class DefaultNavContainerComponent @AssistedInject internal constructor(
 
     @AssistedFactory
     fun interface Factory : NavContainerComponent.Factory {
-        override fun invoke(componentContext: ComponentContext): DefaultNavContainerComponent
+        override fun invoke(
+            componentContext: ComponentContext,
+            onNewHabitClick: () -> Unit,
+        ): DefaultNavContainerComponent
     }
 }

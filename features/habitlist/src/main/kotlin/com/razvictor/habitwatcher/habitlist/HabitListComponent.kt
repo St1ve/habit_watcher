@@ -7,7 +7,12 @@ interface HabitListComponent {
 
     val uiState: Value<HabitListUiState>
 
+    fun onNewHabitClick()
+
     fun interface Factory {
-        operator fun invoke(componentContext: ComponentContext) : HabitListComponent
+        operator fun invoke(
+            componentContext: ComponentContext,
+            onNewHabitClick: () -> Unit,
+        ): HabitListComponent
     }
 }

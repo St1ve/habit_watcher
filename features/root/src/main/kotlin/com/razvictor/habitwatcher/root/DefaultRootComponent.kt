@@ -4,9 +4,13 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
+import com.arkivanov.decompose.router.stack.push
+import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.value.Value
 import com.razvictor.habitwatcher.nav_container.NavContainerComponent
+import com.razvictor.habitwatcher.new_habit.NewHabitComponent
 import com.razvictor.habitwatcher.root.RootComponent.Child.NavContainer
+import com.razvictor.habitwatcher.root.RootComponent.Child.NewHabit
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -15,6 +19,7 @@ import kotlinx.serialization.Serializable
 class DefaultRootComponent @AssistedInject internal constructor(
     @Assisted componentContext: ComponentContext,
     private val navContainerComponentFactory: NavContainerComponent.Factory,
+    private val newHabitComponentFactory: NewHabitComponent.Factory,
 ) : RootComponent, ComponentContext by componentContext {
 
     private val nav = StackNavigation<Config>()
@@ -30,15 +35,22 @@ class DefaultRootComponent @AssistedInject internal constructor(
 
     private fun child(config: Config, context: ComponentContext): RootComponent.Child = when (config) {
         is Config.NavContainer -> NavContainer(navContainerComponent(context))
+        is Config.NewHabit -> NewHabit(newHabitComponentFactory(context))
     }
 
     private fun navContainerComponent(context: ComponentContext): NavContainerComponent =
-        navContainerComponentFactory(componentContext = context)
+        navContainerComponentFactory(
+            componentContext = context,
+            onNewHabitClick = { nav.pushNew(Config.NewHabit) }
+        )
 
     @Serializable
     private sealed interface Config {
         @Serializable
         data object NavContainer : Config
+
+        @Serializable
+        data object NewHabit : Config
     }
 
     @AssistedFactory

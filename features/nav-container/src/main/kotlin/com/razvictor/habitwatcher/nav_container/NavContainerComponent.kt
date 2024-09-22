@@ -19,6 +19,9 @@ interface NavContainerComponent {
     }
 
     fun interface Factory {
-        operator fun invoke(componentContext: ComponentContext) : NavContainerComponent
+        operator fun invoke(
+            componentContext: ComponentContext,
+            onNewHabitClick: () -> Unit,
+        ) : NavContainerComponent
     }
 }

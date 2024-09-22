@@ -28,4 +28,5 @@ include(
     ":features:nav-container",
     ":features:root",
     ":features:statistics",
+    ":features:new-habit",
 )

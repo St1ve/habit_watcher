@@ -46,6 +46,7 @@ android {
 dependencies {
     implementation(project(":features:habitlist"))
     implementation(project(":features:statistics"))
+    implementation(project(":features:new-habit"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
