@@ -52,6 +52,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:db"))
+    implementation(project(":core:di"))
     implementation(project(":core:uikit"))
     implementation(project(":features:habitlist"))
     implementation(project(":features:nav-container"))

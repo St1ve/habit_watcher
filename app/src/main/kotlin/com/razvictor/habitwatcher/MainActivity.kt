@@ -20,7 +20,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val component = DaggerMainDaggerComponent.create().rootComponentFactory(defaultComponentContext())
+        val component = DaggerMainDaggerComponent
+            .factory()
+            .create(appContext = applicationContext)
+            .rootComponentFactory(defaultComponentContext())
 
         setContent {
             HabitWatcherTheme {

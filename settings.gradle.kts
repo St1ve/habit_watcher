@@ -29,4 +29,5 @@ include(
     ":features:root",
     ":features:statistics",
     ":features:new-habit",
+    ":core:db",
 )

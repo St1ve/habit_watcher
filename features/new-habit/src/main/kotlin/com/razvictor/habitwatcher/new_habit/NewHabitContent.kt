@@ -93,7 +93,7 @@ private fun CreateButton(
     modifier: Modifier = Modifier,
 ) {
     Button(
-        modifier = Modifier.padding(top = 18.dp, start = 32.dp, end = 32.dp),
+        modifier = modifier.padding(top = 18.dp, start = 32.dp, end = 32.dp),
         onClick = onClick,
     ) {
         Text(

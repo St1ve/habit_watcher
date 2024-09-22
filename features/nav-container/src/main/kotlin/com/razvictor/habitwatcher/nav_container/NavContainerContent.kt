@@ -29,7 +29,7 @@ fun NavContainerContent(
     Scaffold(
         bottomBar = {
             NavigationBar {
-                uiState.tabs.forEachIndexed { index, tab ->
+                uiState.tabs.forEach { tab ->
                     val (label, icon) = when (tab.id) {
                         NavContainerComponent.Child.List::class -> {
                             stringResource(R.string.tab_list) to Icons.Filled.Home
