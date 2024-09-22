@@ -1,45 +1,69 @@
 package com.razvictor.habitwatcher.new_habit
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.value.MutableValue
+import com.arkivanov.decompose.value.Value
+import com.arkivanov.decompose.value.update
 import com.arkivanov.essenty.instancekeeper.InstanceKeeper
 import com.arkivanov.essenty.instancekeeper.getOrCreate
-import com.razvictor.habitwatcher.db.dao.HabitDao
-import com.razvictor.habitwatcher.db.entities.HabitEntity
+import com.razvictor.habitwatcher.common.repository.HabitRepository
+import com.razvictor.habitwatcher.new_habit.NewHabitUiState.FieldState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DefaultNewHabitComponent @AssistedInject internal constructor(
     @Assisted componentContext: ComponentContext,
-    private val habitDao: HabitDao,
+    @Assisted private val onNewHabitCreated: () -> Unit,
+    private val habitRepository: HabitRepository,
 ) : NewHabitComponent, ComponentContext by componentContext {
 
-    private val newHabitRetainedInstance = instanceKeeper.getOrCreate { NewHabitRetainedInstance(habitDao) }
+    private val retainedInstance = instanceKeeper.getOrCreate {
+        NewHabitRetainedInstance(habitRepository = habitRepository)
+    }
+    override val uiState: Value<NewHabitUiState> = retainedInstance.mUiState
+
+    override fun onNameChanged(newName: String) {
+        retainedInstance.mUiState.update { oldUiState ->
+            oldUiState.copy(name = newName, fieldState = FieldState.OKAY)
+        }
+    }
 
     override fun onCreateHabitClick() {
-        newHabitRetainedInstance.createNewHabit()
+        val name = uiState.value.name
+        if (name.isEmpty()) {
+            retainedInstance.mUiState.update { oldState -> oldState.copy(fieldState = FieldState.ERROR) }
+            return
+        }
+        retainedInstance.createNewHabit(name = name, onNewHabitCreated = onNewHabitCreated)
     }
 
     @AssistedFactory
     interface Factory : NewHabitComponent.Factory {
-        override fun invoke(componentContext: ComponentContext): DefaultNewHabitComponent
+        override fun invoke(componentContext: ComponentContext, onNewHabitCreated: () -> Unit): DefaultNewHabitComponent
     }
 }
 
-// FIXME: Make it like repository
 internal class NewHabitRetainedInstance(
-//    mainContext: CoroutineContext,
-    private val habitDao: HabitDao,
+    private val habitRepository: HabitRepository,
 ) : InstanceKeeper.Instance {
-    private val scope = CoroutineScope(SupervisorJob())
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+    val mUiState = MutableValue(NewHabitUiState.DEFAULT)
 
-    fun createNewHabit() {
+    fun createNewHabit(
+        name: String,
+        onNewHabitCreated: () -> Unit,
+    ) {
         scope.launch {
-            habitDao.insertHabits(HabitEntity(name = "Test"))
+            habitRepository.createHabit(name)
+        }.invokeOnCompletion {
+            onNewHabitCreated()
         }
     }
 

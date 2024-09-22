@@ -4,6 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
+import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.value.Value
@@ -35,8 +36,14 @@ class DefaultRootComponent @AssistedInject internal constructor(
 
     private fun child(config: Config, context: ComponentContext): RootComponent.Child = when (config) {
         is Config.NavContainer -> NavContainer(navContainerComponent(context))
-        is Config.NewHabit -> NewHabit(newHabitComponentFactory(context))
+        is Config.NewHabit -> NewHabit(newHabitComponent(context))
     }
+
+    private fun newHabitComponent(context: ComponentContext): NewHabitComponent =
+        newHabitComponentFactory(
+            componentContext = context,
+            onNewHabitCreated = { nav.pop() }
+        )
 
     private fun navContainerComponent(context: ComponentContext): NavContainerComponent =
         navContainerComponentFactory(

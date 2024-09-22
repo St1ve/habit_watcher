@@ -31,6 +31,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = libs.versions.jvmTarget.get()
@@ -56,6 +57,7 @@ dependencies {
     implementation(libs.extension.decompose)
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     androidTestImplementation(platform(libs.androidx.compose.bom))
 

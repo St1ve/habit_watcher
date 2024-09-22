@@ -82,6 +82,8 @@ fun HabitListContent(
             HabitList(
                 fabNestedScrollConnection = fabNestedScrollConnection,
                 habits = uiState.habits,
+                onCardClick = component::onCardClick,
+                onToggleClick = component::onMarkHabitClick,
                 modifier = Modifier.padding(innerPadding),
             )
         }
@@ -103,6 +105,8 @@ private fun EmptyList(modifier: Modifier = Modifier) {
 private fun HabitList(
     fabNestedScrollConnection: NestedScrollConnection,
     habits: List<HabitUiState>,
+    onCardClick: (Long) -> Unit,
+    onToggleClick: (Long, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -115,7 +119,12 @@ private fun HabitList(
             count = habits.count(),
             key = { index -> habits[index].id },
         ) { index ->
-            HabitCard(habitState = habits[index])
+            val habit = habits[index]
+            HabitCard(
+                habitState = habit,
+                onCardClick = { onCardClick(habit.id) },
+                onActionToggle = { onToggleClick(habit.id, habit.isDone) }
+            )
         }
     }
 }
@@ -123,10 +132,12 @@ private fun HabitList(
 @Composable
 private fun HabitCard(
     habitState: HabitUiState,
+    onCardClick: () -> Unit,
+    onActionToggle: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
-        onClick = { /* FIXME: Add click */ },
+        onClick = onCardClick,
         modifier = modifier
             .padding(horizontal = 16.dp)
             .fillMaxWidth(),
@@ -143,7 +154,7 @@ private fun HabitCard(
 
             ActionButton(
                 toggled = habitState.isDone,
-                onActionToggle = { /* FIXME: Add click */ },
+                onActionToggle = onActionToggle,
                 modifier = Modifier.align(Alignment.End)
             )
         }
@@ -153,14 +164,14 @@ private fun HabitCard(
 @Composable
 private fun ActionButton(
     toggled: Boolean,
-    onActionToggle: (Boolean) -> Unit,
+    onActionToggle: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Button(
         modifier = modifier
             .animateContentSize()
             .padding(end = 8.dp),
-        onClick = { onActionToggle(!toggled) },
+        onClick = onActionToggle,
     ) {
         AnimatedVisibility(toggled) {
             Icon(

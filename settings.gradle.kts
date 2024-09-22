@@ -30,4 +30,5 @@ include(
     ":features:statistics",
     ":features:new-habit",
     ":core:db",
+    ":common",
 )

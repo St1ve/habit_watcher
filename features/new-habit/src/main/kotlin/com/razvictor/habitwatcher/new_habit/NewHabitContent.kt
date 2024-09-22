@@ -2,7 +2,9 @@ package com.razvictor.habitwatcher.new_habit
 
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -13,6 +15,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -27,7 +30,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.razvictor.habitwatcher.features.habitlist.impl.R
+import com.razvictor.habitwatcher.new_habit.NewHabitUiState.FieldState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,6 +40,7 @@ fun NewHabitContent(
     component: NewHabitComponent,
     modifier: Modifier = Modifier,
 ) {
+    val uiState by component.uiState.subscribeAsState()
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
 
     Scaffold(
@@ -60,24 +66,31 @@ fun NewHabitContent(
                 .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
         ) {
-            HabitName()
+            HabitName(
+                name = uiState.name,
+                fieldState = uiState.fieldState,
+                onValueChange = component::onNameChanged,
+            )
             CreateButton(onClick = component::onCreateHabitClick)
         }
     }
 }
 
 @Composable
-private fun HabitName(modifier: Modifier = Modifier) {
-    // FIXME: Pass name through component state
-    var name by rememberSaveable { mutableStateOf("") }
-
+private fun HabitName(
+    name: String,
+    fieldState: FieldState,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     OutlinedTextField(
         modifier = modifier
             .padding(top = 16.dp)
             .padding(horizontal = 32.dp)
             .fillMaxWidth(),
         value = name,
-        onValueChange = { name = it },
+        isError = fieldState == FieldState.ERROR,
+        onValueChange = onValueChange,
         label = { Text(stringResource(R.string.habit_name_label)) },
         maxLines = 3,
         keyboardOptions = KeyboardOptions(
@@ -100,5 +113,22 @@ private fun CreateButton(
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
             text = stringResource(R.string.create_habit_button_name)
         )
+    }
+}
+
+@Composable
+private fun TextFieldError(
+    textError: String,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier.fillMaxWidth()) {
+        Text(
+            text = textError,
+            modifier = Modifier.fillMaxWidth(),
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = MaterialTheme.colorScheme.error,
+            )
+        )
+        Spacer(modifier = Modifier.height(8.dp))
     }
 }

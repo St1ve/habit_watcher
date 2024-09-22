@@ -1,6 +1,8 @@
 package com.razvictor.habitwatcher
 
 import android.content.Context
+import com.razvictor.habitwatcher.common.di.CommonModule
+import com.razvictor.habitwatcher.common.repository.HabitRepository
 import com.razvictor.habitwatcher.db.AppDatabase
 import com.razvictor.habitwatcher.db.DataBaseModule
 import com.razvictor.habitwatcher.root.RootComponent
@@ -11,23 +13,26 @@ import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [
-    RootModule::class,
-    DataBaseModule::class,
-])
+@Component(
+    modules = [
+        RootModule::class,
+        DataBaseModule::class,
+        CommonModule::class,
+    ]
+)
 interface MainDaggerComponent {
 
-    val rootComponentFactory : RootComponent.Factory
+    val rootComponentFactory: RootComponent.Factory
 
     @AppContext
-    fun provideApplicationContext() : Context
+    fun provideApplicationContext(): Context
 
     @Component.Factory
     interface Factory {
         fun create(
             @BindsInstance
             @AppContext
-            appContext : Context,
-        ) : MainDaggerComponent
+            appContext: Context,
+        ): MainDaggerComponent
     }
 }

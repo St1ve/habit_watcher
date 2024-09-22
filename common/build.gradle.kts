@@ -2,12 +2,18 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
     id("kotlin-kapt")
 }
 
 android {
-    namespace = "${libs.versions.namespace.get()}.features.habitlist.impl"
+    namespace = "${libs.versions.namespace.get()}.common"
     compileSdk = libs.versions.compileSdk.get().toInt()
+
+    ksp {
+        arg("room.incremental", "true")
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
@@ -36,35 +42,16 @@ android {
     kotlinOptions {
         jvmTarget = libs.versions.jvmTarget.get()
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtensionVersion.get()
-    }
 }
 
 dependencies {
     implementation(project(":core:db"))
-    implementation(project(":common"))
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.ui.text.google.fonts)
-    implementation(libs.decompose)
-    implementation(libs.extension.decompose)
+    implementation(libs.room.runtime)
+    implementation(libs.room.coroutines)
+    annotationProcessor(libs.room.annotation.processor)
+    ksp(libs.room.annotation.processor)
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
-    implementation(libs.essenty)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
-
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
 }
