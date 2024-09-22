@@ -3,15 +3,14 @@ package com.razvictor.habitwatcher.nav_container
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
-import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.childStack
-import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.router.stack.replaceCurrent
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.update
+import com.arkivanov.essenty.instancekeeper.InstanceKeeper
+import com.arkivanov.essenty.instancekeeper.getOrCreate
 import com.razvictor.habitwatcher.habitlist.HabitListComponent
-import com.razvictor.habitwatcher.new_habit.NewHabitComponent
 import com.razvictor.habitwatcher.statistics.StatisticsComponent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -26,25 +25,11 @@ class DefaultNavContainerComponent @AssistedInject internal constructor(
     @Assisted private val onNewHabitClick: () -> Unit,
 ) : NavContainerComponent, ComponentContext by componentContext {
 
-    // FIXME: Save state on configuration changed
-    private val _uiState: MutableValue<NavContainerUiState> = MutableValue(
-        NavContainerUiState(
-            tabs = listOf(
-                NavContainerUiState.TabState(
-                    id = NavContainerComponent.Child.List::class,
-                    isSelected = true,
-                ),
-                NavContainerUiState.TabState(
-                    id = NavContainerComponent.Child.Statistics::class,
-                    isSelected = false,
-                )
-            )
-        )
-    )
-    override val uiState: Value<NavContainerUiState> = _uiState
+    private val retainedInstance = instanceKeeper.getOrCreate { NavContainerRetainedInstance() }
+    override val uiState: Value<NavContainerUiState> = retainedInstance.mUiState
 
     override fun onTabSelected(tabId: KClass<out NavContainerComponent.Child>) {
-        _uiState.update { currentState ->
+        retainedInstance.mUiState.update { currentState ->
             NavContainerUiState(currentState.tabs.map { tab -> tab.copy(isSelected = tab.id == tabId) })
         }
         val config = when (tabId) {
@@ -52,12 +37,11 @@ class DefaultNavContainerComponent @AssistedInject internal constructor(
             NavContainerComponent.Child.Statistics::class -> Config.Statistics
             else -> error("Unknown tabId: $tabId")
         }
-        nav.bringToFront(config)
+        nav.replaceCurrent(config)
     }
 
     private val nav = StackNavigation<Config>()
 
-    // FIXME: Remove stack
     override val stack: Value<ChildStack<*, NavContainerComponent.Child>> = childStack(
         source = nav,
         initialConfiguration = Config.List,
@@ -94,4 +78,8 @@ class DefaultNavContainerComponent @AssistedInject internal constructor(
             onNewHabitClick: () -> Unit,
         ): DefaultNavContainerComponent
     }
+}
+
+internal class NavContainerRetainedInstance : InstanceKeeper.Instance {
+    val mUiState = MutableValue(NavContainerUiState.DEFAULT)
 }
