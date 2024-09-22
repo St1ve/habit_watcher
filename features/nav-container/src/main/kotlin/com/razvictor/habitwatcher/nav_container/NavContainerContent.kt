@@ -14,6 +14,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.arkivanov.decompose.extensions.compose.stack.Children
+import com.arkivanov.decompose.extensions.compose.stack.animation.fade
+import com.arkivanov.decompose.extensions.compose.stack.animation.plus
+import com.arkivanov.decompose.extensions.compose.stack.animation.scale
+import com.arkivanov.decompose.extensions.compose.stack.animation.slide
+import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.razvictor.habitwatcher.features.nav_container.R
 import com.razvictor.habitwatcher.habitlist.HabitListContent
@@ -60,6 +65,7 @@ fun NavContainerContent(
         Children(
             stack = component.stack,
             modifier = modifier.padding(innerPadding),
+            animation = stackAnimation(fade() + scale()),
         ) {
             when (val child = it.instance) {
                 is NavContainerComponent.Child.List -> HabitListContent(child.component)
