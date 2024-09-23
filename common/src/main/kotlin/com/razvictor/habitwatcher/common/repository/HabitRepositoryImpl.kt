@@ -20,8 +20,10 @@ class HabitRepositoryImpl @Inject constructor(
             .map { habitDbs -> habitDbs.toDomain() }
     }
 
-    override suspend fun getHabit(id: Long): Habit {
-        TODO("Not yet implemented")
+    override fun listenHabit(id: Long): Flow<Habit> {
+        return habitDao
+            .listenHabit(id)
+            .map { habitDb -> habitDb.toDomain() }
     }
 
     override suspend fun createHabit(name: String) {
@@ -32,6 +34,10 @@ class HabitRepositoryImpl @Inject constructor(
 
     override suspend fun deleteHabit(id: Long) {
         habitDao.deleteHabit(id)
+    }
+
+    override suspend fun editHabit(id: Long, name: String) {
+        habitDao.renameHabit(id, name)
     }
 
     override suspend fun resetCompletionHabit(habitId: Long, date: LocalDate) {

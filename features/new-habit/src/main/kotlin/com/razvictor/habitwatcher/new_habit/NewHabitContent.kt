@@ -115,20 +115,3 @@ private fun CreateButton(
         )
     }
 }
-
-@Composable
-private fun TextFieldError(
-    textError: String,
-    modifier: Modifier = Modifier
-) {
-    Column(modifier = modifier.fillMaxWidth()) {
-        Text(
-            text = textError,
-            modifier = Modifier.fillMaxWidth(),
-            style = MaterialTheme.typography.bodyMedium.copy(
-                color = MaterialTheme.colorScheme.error,
-            )
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-    }
-}

@@ -15,6 +15,7 @@ interface HabitListComponent {
         operator fun invoke(
             componentContext: ComponentContext,
             onNewHabitClick: () -> Unit,
+            onDetailsHabitClick: (Long) -> Unit,
         ): HabitListComponent
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="new_habit_title">Create new habit</string>
-    <string name="habit_name_label">Create habit</string>
+    <string name="habit_name_label">Name</string>
     <string name="create_habit_button_name">Create habit</string>
 </resources>

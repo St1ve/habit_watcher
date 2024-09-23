@@ -49,6 +49,7 @@ android {
 dependencies {
     implementation(project(":features:nav-container"))
     implementation(project(":features:new-habit"))
+    implementation(project(":features:details"))
 
     implementation(libs.decompose)
     implementation(libs.extension.decompose)

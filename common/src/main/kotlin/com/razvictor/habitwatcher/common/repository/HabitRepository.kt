@@ -6,9 +6,10 @@ import java.time.LocalDate
 
 interface HabitRepository {
     fun listenHabits() : Flow<List<Habit>>
-    suspend fun getHabit(id: Long) : Habit
+    fun listenHabit(id: Long) : Flow<Habit>
     suspend fun createHabit(name: String)
     suspend fun deleteHabit(id: Long)
+    suspend fun editHabit(id: Long, name: String)
     suspend fun completeHabit(habitId: Long, date: LocalDate)
     suspend fun resetCompletionHabit(habitId: Long, date: LocalDate)
 }

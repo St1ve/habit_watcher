@@ -22,6 +22,7 @@ class DefaultHabitListComponent @AssistedInject internal constructor(
     @Assisted componentContext: ComponentContext,
     @Assisted private val onNewHabitClick: () -> Unit,
     private val habitRepository: HabitRepository,
+    @Assisted private val onDetailsHabitClick: (Long) -> Unit,
 ) : HabitListComponent, ComponentContext by componentContext {
 
     private val retainedInstance = instanceKeeper.getOrCreate {
@@ -41,15 +42,14 @@ class DefaultHabitListComponent @AssistedInject internal constructor(
         retainedInstance.toggleHabitDone(habitId = id, isDone = isDone)
     }
 
-    override fun onCardClick(id: Long) {
-        TODO("Not yet implemented")
-    }
+    override fun onCardClick(id: Long) { onDetailsHabitClick(id) }
 
     @AssistedFactory
     interface Factory : HabitListComponent.Factory {
         override fun invoke(
             componentContext: ComponentContext,
             onNewHabitClick: () -> Unit,
+            onDetailsHabitClick: (Long) -> Unit,
         ): DefaultHabitListComponent
     }
 }

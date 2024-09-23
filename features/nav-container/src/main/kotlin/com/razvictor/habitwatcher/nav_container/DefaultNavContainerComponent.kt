@@ -23,6 +23,7 @@ class DefaultNavContainerComponent @AssistedInject internal constructor(
     private val habitListComponentFactory: HabitListComponent.Factory,
     private val statisticsComponentFactory: StatisticsComponent.Factory,
     @Assisted private val onNewHabitClick: () -> Unit,
+    @Assisted private val onDetailsHabitClick: (Long) -> Unit,
 ) : NavContainerComponent, ComponentContext by componentContext {
 
     private val retainedInstance = instanceKeeper.getOrCreate { NavContainerRetainedInstance() }
@@ -59,6 +60,7 @@ class DefaultNavContainerComponent @AssistedInject internal constructor(
         habitListComponentFactory(
             componentContext = context,
             onNewHabitClick = onNewHabitClick,
+            onDetailsHabitClick = onDetailsHabitClick,
         )
 
     @Serializable
@@ -76,6 +78,7 @@ class DefaultNavContainerComponent @AssistedInject internal constructor(
         override fun invoke(
             componentContext: ComponentContext,
             onNewHabitClick: () -> Unit,
+            onDetailsHabitClick: (Long) -> Unit,
         ): DefaultNavContainerComponent
     }
 }
