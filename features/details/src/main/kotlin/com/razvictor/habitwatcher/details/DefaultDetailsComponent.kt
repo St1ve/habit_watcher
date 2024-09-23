@@ -8,6 +8,7 @@ import com.arkivanov.essenty.instancekeeper.InstanceKeeper
 import com.arkivanov.essenty.instancekeeper.getOrCreate
 import com.razvictor.habitwatcher.common.repository.HabitRepository
 import com.razvictor.habitwatcher.details.DetailsUiState.HeaderState
+import com.razvictor.habitwatcher.uikit.component.calendar.CalendarState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -16,9 +17,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 class DefaultDetailsComponent @AssistedInject internal constructor(
     @Assisted componentContext: ComponentContext,
@@ -54,6 +55,30 @@ class DefaultDetailsComponent @AssistedInject internal constructor(
         retainedInstance.mUiState.update { oldState ->
             oldState.copy(headerState = oldState.headerState.copy(state = HeaderState.State.EDIT))
         }
+    }
+
+    override fun onPreviousMonthClick() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onNextMonthClick() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onCalendarCellClick(id: String) {
+        // FIXME: Fix this logic
+        val isDone = uiState.value.calendarState.gridState.weeks.find {
+            it.cells.find { cell ->
+                cell is CalendarState.GridState.WeekState.CellState.Data
+                    && cell.id == id
+                    && cell.backgroundAlpha > 0
+            } != null
+        } != null
+        retainedInstance.toggleHabitDone(
+            habitId = habitId,
+            isDone = isDone,
+            dateCompletionStr = id,
+        )
     }
 
     @AssistedFactory
@@ -93,6 +118,17 @@ internal class DetailsRetainedInstance(
     fun saveChanges(habitId: Long, newName: String) {
         scope.launch {
             habitRepository.editHabit(id = habitId, name = newName)
+        }
+    }
+
+    fun toggleHabitDone(habitId: Long, isDone: Boolean, dateCompletionStr: String) {
+        scope.launch {
+            val dateCompletion = LocalDate.parse(dateCompletionStr)
+            if (isDone) {
+                habitRepository.resetCompletionHabit(habitId, dateCompletion)
+            } else {
+                habitRepository.completeHabit(habitId, dateCompletion)
+            }
         }
     }
 

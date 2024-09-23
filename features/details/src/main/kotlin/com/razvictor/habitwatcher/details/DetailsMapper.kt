@@ -2,6 +2,8 @@ package com.razvictor.habitwatcher.details
 
 import com.razvictor.habitwatcher.common.models.Habit
 import com.razvictor.habitwatcher.details.DetailsUiState.HeaderState
+import com.razvictor.habitwatcher.uikit.component.calendar.toUi
+import java.time.LocalDate
 
 fun Habit.toUi(): DetailsUiState {
     val headerState = HeaderState(
@@ -11,5 +13,7 @@ fun Habit.toUi(): DetailsUiState {
 
     return DetailsUiState(
         headerState = headerState,
+        // FIXME: Replace by selected date 
+        calendarState = LocalDate.now().toUi(datesCompleted)
     )
 }

@@ -1,7 +1,10 @@
 package com.razvictor.habitwatcher.details
 
+import com.razvictor.habitwatcher.uikit.component.calendar.CalendarState
+
 data class DetailsUiState(
     val headerState: HeaderState,
+    val calendarState: CalendarState
 ) {
     data class HeaderState(
         val title: String,
@@ -22,6 +25,7 @@ data class DetailsUiState(
     companion object {
         val DEFAULT = DetailsUiState(
             headerState = HeaderState.DEFAULT,
+            calendarState = CalendarState.DEFAULT,
         )
     }
 }

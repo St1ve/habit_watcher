@@ -11,6 +11,10 @@ interface DetailsComponent {
     fun onHeaderNameChanged(newTitle: String)
     fun onEditClick()
 
+    fun onPreviousMonthClick()
+    fun onNextMonthClick()
+    fun onCalendarCellClick(id: String)
+
     fun interface Factory {
         operator fun invoke(
             habitId: Long,

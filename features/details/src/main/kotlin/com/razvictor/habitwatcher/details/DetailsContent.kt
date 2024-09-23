@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.razvictor.habitwatcher.details.DetailsUiState.HeaderState
 import com.razvictor.habitwatcher.features.details.R
+import com.razvictor.habitwatcher.uikit.component.calendar.Calendar
 
 @Composable
 fun DetailsContent(
@@ -42,6 +43,12 @@ fun DetailsContent(
         modifier = modifier.fillMaxSize()
     ) {
         DetailsAppBar(uiState = uiState.headerState, component = component)
+        Calendar(
+            state = uiState.calendarState,
+            onCellClick = component::onCalendarCellClick,
+            onPreviousClick = component::onPreviousMonthClick,
+            onNextClick = component::onNextMonthClick,
+        )
     }
 }
 

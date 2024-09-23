@@ -47,6 +47,7 @@ android {
 dependencies {
     implementation(project(":core:db"))
     implementation(project(":common"))
+    implementation(project(":core:uikit"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
