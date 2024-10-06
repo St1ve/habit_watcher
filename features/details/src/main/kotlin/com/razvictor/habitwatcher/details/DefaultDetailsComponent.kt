@@ -6,6 +6,7 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.update
 import com.arkivanov.essenty.instancekeeper.InstanceKeeper
 import com.arkivanov.essenty.instancekeeper.getOrCreate
+import com.razvictor.habitwatcher.common.models.Habit
 import com.razvictor.habitwatcher.common.repository.HabitRepository
 import com.razvictor.habitwatcher.details.DetailsUiState.HeaderState
 import com.razvictor.habitwatcher.uikit.component.calendar.CalendarState
@@ -54,11 +55,11 @@ class DefaultDetailsComponent @AssistedInject internal constructor(
     }
 
     override fun onPreviousMonthClick() {
-        TODO("Not yet implemented")
+        retainedInstance.selectPrevMonth()
     }
 
     override fun onNextMonthClick() {
-        TODO("Not yet implemented")
+        retainedInstance.selectNextMonth()
     }
 
     override fun onCalendarCellClick(id: String) {
@@ -92,14 +93,19 @@ internal class DetailsRetainedInstance(
     private val habitRepository: HabitRepository,
 ) : InstanceKeeper.Instance {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+    private var selectedCalendarDate = LocalDate.now()
+    private var habit: Habit? = null
     val mUiState = MutableValue(DetailsUiState.DEFAULT)
 
     init {
+        // FIXME: Поправить логику, чтобы не брать сразу все данные, а вытаскивать порционно
         habitRepository
             .listenHabit(habitId)
-            .onEach { habit -> mUiState.update { habit.toUi() } }
+            .onEach { habit ->
+                this.habit = habit
+                mUiState.update { habit.toUi(selectedCalendarDate) }
+            }
             .launchIn(scope)
-
     }
 
     fun deleteHabit(habitId: Long, onComplete: () -> Unit) {
@@ -125,6 +131,16 @@ internal class DetailsRetainedInstance(
                 habitRepository.completeHabit(habitId, dateCompletion)
             }
         }
+    }
+
+    fun selectNextMonth() {
+        selectedCalendarDate = selectedCalendarDate.plusMonths(1)
+        mUiState.update { oldState -> habit?.toUi(selectedCalendarDate) ?: oldState }
+    }
+
+    fun selectPrevMonth() {
+        selectedCalendarDate = selectedCalendarDate.minusMonths(1)
+        mUiState.update { oldState -> habit?.toUi(selectedCalendarDate) ?: oldState }
     }
 
     override fun onDestroy() {

@@ -1,5 +1,7 @@
 package com.razvictor.habitwatcher.uikit.component.calendar
 
+import androidx.compose.runtime.Immutable
+
 data class CalendarState(
     val header: String,
     val legend: LegendState,
@@ -14,6 +16,8 @@ data class CalendarState(
     data class GridState(val weeks: List<WeekState>) {
 
         data class WeekState(val cells: List<CellState>) {
+
+            @Immutable
             sealed interface CellState {
                 data object Empty : CellState
                 data class Data(

@@ -12,7 +12,7 @@ fun LocalDate.toUi(
 ) : CalendarState {
     val header = month.getDisplayName(TextStyle.FULL, Locale.getDefault())
 
-    val weekDays = DayOfWeek.entries.map { it.getDisplayName(TextStyle.SHORT, Locale.getDefault()) }
+    val weekDays = DayOfWeek.entries.map { dayOfWeek -> dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()) }
     val legend = CalendarState.LegendState(weekDays)
     val dateWithBeginOfMonth = withDayOfMonth(1)
     val daysSkipAtBeginning = dateWithBeginOfMonth.dayOfWeek.ordinal - 1
@@ -22,6 +22,7 @@ fun LocalDate.toUi(
     val weeks = (0 until weekNumber).map { weekIndex ->
         val cellState = (0 until 7).map { dayIndex ->
             when{
+                
                 weekIndex == 0 && daysSkipAtBeginning > 0 && dayIndex < daysSkipAtBeginning -> {
                     CellState.Empty
                 }
