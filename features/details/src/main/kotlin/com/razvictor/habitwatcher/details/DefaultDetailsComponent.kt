@@ -29,13 +29,9 @@ class DefaultDetailsComponent @AssistedInject internal constructor(
 ) : DetailsComponent, ComponentContext by componentContext {
 
     private val retainedInstance = instanceKeeper.getOrCreate {
-        DetailsRetainedInstance(habitRepository = habitRepository)
+        DetailsRetainedInstance(habitId = habitId, habitRepository = habitRepository)
     }
     override val uiState: Value<DetailsUiState> = retainedInstance.mUiState
-
-    init {
-        retainedInstance.getHabit(habitId)
-    }
 
     override fun onSaveClick() {
         retainedInstance.saveChanges(habitId = habitId, newName = uiState.value.headerState.title)
@@ -92,19 +88,18 @@ class DefaultDetailsComponent @AssistedInject internal constructor(
 }
 
 internal class DetailsRetainedInstance(
+    habitId: Long,
     private val habitRepository: HabitRepository,
 ) : InstanceKeeper.Instance {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     val mUiState = MutableValue(DetailsUiState.DEFAULT)
 
-    fun getHabit(habitId: Long) {
+    init {
         habitRepository
             .listenHabit(habitId)
-            .onEach { habit ->
-                // TODO: Подумать, что если редактировать имя и прожимать на календаре статусы одновременно
-                mUiState.update { habit.toUi() }
-            }
+            .onEach { habit -> mUiState.update { habit.toUi() } }
             .launchIn(scope)
+
     }
 
     fun deleteHabit(habitId: Long, onComplete: () -> Unit) {

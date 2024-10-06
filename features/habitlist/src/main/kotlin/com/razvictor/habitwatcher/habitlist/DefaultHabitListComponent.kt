@@ -11,6 +11,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.launchIn
@@ -25,14 +26,23 @@ class DefaultHabitListComponent @AssistedInject internal constructor(
     @Assisted private val onDetailsHabitClick: (Long) -> Unit,
 ) : HabitListComponent, ComponentContext by componentContext {
 
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+
     private val retainedInstance = instanceKeeper.getOrCreate {
         HabitListRetainedInstance(habitRepository)
     }
-    override val uiState: Value<HabitListUiState> = retainedInstance.mUiState
 
     init {
-        retainedInstance.listenHabits()
+        habitRepository
+            .listenHabits()
+            .onEach { habits ->
+                retainedInstance.mUiState.update { oldState -> oldState.copy(habits = habits.toUi()) }
+            }
+            .launchIn(scope)
+
     }
+
+    override val uiState: Value<HabitListUiState> = retainedInstance.mUiState
 
     override fun onNewHabitClick() {
         onNewHabitClick.invoke()
@@ -42,7 +52,9 @@ class DefaultHabitListComponent @AssistedInject internal constructor(
         retainedInstance.toggleHabitDone(habitId = id, isDone = isDone)
     }
 
-    override fun onCardClick(id: Long) { onDetailsHabitClick(id) }
+    override fun onCardClick(id: Long) {
+        onDetailsHabitClick(id)
+    }
 
     @AssistedFactory
     interface Factory : HabitListComponent.Factory {
@@ -57,17 +69,8 @@ class DefaultHabitListComponent @AssistedInject internal constructor(
 internal class HabitListRetainedInstance(
     private val habitRepository: HabitRepository,
 ) : InstanceKeeper.Instance {
-    private val scope = CoroutineScope(SupervisorJob())
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     val mUiState = MutableValue(HabitListUiState.DEFAULT)
-
-    fun listenHabits() {
-        habitRepository
-            .listenHabits()
-            .onEach { habits ->
-                mUiState.update { oldState -> oldState.copy(habits = habits.toUi()) }
-            }
-            .launchIn(scope)
-    }
 
     fun toggleHabitDone(habitId: Long, isDone: Boolean) {
         scope.launch {
