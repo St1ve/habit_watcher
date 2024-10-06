@@ -9,26 +9,31 @@ import java.util.Locale
 
 fun LocalDate.toUi(
     datesCompleted: List<LocalDate>,
-) : CalendarState {
+): CalendarState {
     val header = month.getDisplayName(TextStyle.FULL, Locale.getDefault())
 
     val weekDays = DayOfWeek.entries.map { dayOfWeek -> dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()) }
     val legend = CalendarState.LegendState(weekDays)
+
     val dateWithBeginOfMonth = withDayOfMonth(1)
-    val daysSkipAtBeginning = dateWithBeginOfMonth.dayOfWeek.ordinal - 1
+    val daysSkipAtBeginning = dateWithBeginOfMonth.dayOfWeek.ordinal
+
     val daysSkipAtEnd = DayOfWeek.SUNDAY.ordinal - withDayOfMonth(lengthOfMonth()).dayOfWeek.ordinal
+
     val cellsNumber = lengthOfMonth() + daysSkipAtBeginning + daysSkipAtEnd
     val weekNumber = cellsNumber / 7
     val weeks = (0 until weekNumber).map { weekIndex ->
         val cellState = (0 until 7).map { dayIndex ->
-            when{
-                
+            when {
+
                 weekIndex == 0 && daysSkipAtBeginning > 0 && dayIndex < daysSkipAtBeginning -> {
                     CellState.Empty
                 }
-                weekIndex == 7 && daysSkipAtEnd > 0 && dayIndex > 7 - daysSkipAtEnd -> {
+
+                weekIndex == weekNumber - 1 && daysSkipAtEnd > 0 && dayIndex >= 7 - daysSkipAtEnd -> {
                     CellState.Empty
                 }
+
                 else -> {
                     val day = weekIndex * 7 + dayIndex - daysSkipAtBeginning.toLong()
                     val dateOfDay = dateWithBeginOfMonth.plusDays(day)
