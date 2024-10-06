@@ -20,6 +20,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -27,6 +28,9 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.razvictor.habitwatcher.features.habitlist.impl.R
 import com.razvictor.habitwatcher.new_habit.NewHabitUiState.FieldState
+
+const val SCREEN_PREFIX_TEST_TAG = "NewHabitContent"
+fun screenTag(elementTag: String) = "${SCREEN_PREFIX_TEST_TAG}_$elementTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,11 +42,14 @@ fun NewHabitContent(
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
 
     Scaffold(
-        modifier = modifier,
+        modifier = modifier.testTag(screenTag("container")),
         topBar = {
             TopAppBar(
                 title = {
-                    Text(stringResource(R.string.new_habit_title))
+                    Text(
+                        text = stringResource(R.string.new_habit_title),
+                        modifier = Modifier.testTag(screenTag("title_text"))
+                    )
                 },
                 navigationIcon = {
                     IconButton(onClick = { onBackPressedDispatcher?.onBackPressed() }) {
@@ -79,6 +86,7 @@ private fun HabitName(
 ) {
     OutlinedTextField(
         modifier = modifier
+            .testTag(screenTag("habitName"))
             .padding(top = 16.dp)
             .padding(horizontal = 32.dp)
             .fillMaxWidth(),
@@ -100,7 +108,9 @@ private fun CreateButton(
     modifier: Modifier = Modifier,
 ) {
     Button(
-        modifier = modifier.padding(top = 18.dp, start = 32.dp, end = 32.dp),
+        modifier = modifier
+            .testTag(screenTag("createButton"))
+            .padding(top = 18.dp, start = 32.dp, end = 32.dp),
         onClick = onClick,
     ) {
         Text(

@@ -33,11 +33,15 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.razvictor.habitwatcher.features.habitlist.R
 import com.razvictor.habitwatcher.habitlist.HabitListUiState.HabitUiState
+
+const val SCREEN_PREFIX_TEST_TAG = "HabitListContent"
+fun screenTag(elementTag: String) = "${SCREEN_PREFIX_TEST_TAG}_$elementTag"
 
 @Composable
 fun HabitListContent(
@@ -60,7 +64,9 @@ fun HabitListContent(
         }
     }
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .testTag(screenTag("container"))
+            .fillMaxSize(),
         floatingActionButton = {
             AnimatedVisibility(
                 visible = fabIsVisible,
@@ -68,6 +74,7 @@ fun HabitListContent(
                 exit = slideOutVertically(targetOffsetY = { it * 2 }),
             ) {
                 FloatingActionButton(
+                    modifier = Modifier.testTag(screenTag("addHabitFloatingButton")),
                     onClick = { component.onNewHabitClick() },
                 ) {
                     Icon(imageVector = Icons.Filled.Add, contentDescription = null)
@@ -92,7 +99,9 @@ fun HabitListContent(
 
 @Composable
 private fun EmptyList(modifier: Modifier = Modifier) {
-    Box(modifier.fillMaxSize()) {
+    Box(modifier
+        .testTag(screenTag("emptyList"))
+        .fillMaxSize()) {
         Text(
             text = stringResource(R.string.empty_list),
             modifier = Modifier.align(Alignment.Center),
@@ -113,6 +122,7 @@ private fun HabitList(
         contentPadding = PaddingValues(bottom = 48.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = modifier
+            .testTag(screenTag("dataList"))
             .nestedScroll(fabNestedScrollConnection)
     ) {
         items(
@@ -139,6 +149,7 @@ private fun HabitCard(
     Card(
         onClick = onCardClick,
         modifier = modifier
+            .testTag(screenTag("habitCard"))
             .padding(horizontal = 16.dp)
             .fillMaxWidth(),
     ) {
@@ -150,12 +161,15 @@ private fun HabitCard(
             Text(
                 text = habitState.name,
                 style = Typography().headlineMedium,
+                modifier = Modifier.testTag(screenTag("habitCard_name"))
             )
 
             ActionButton(
                 toggled = habitState.isDone,
                 onActionToggle = onActionToggle,
-                modifier = Modifier.align(Alignment.End)
+                modifier = Modifier
+                    .testTag(screenTag("habitCard_actionButton"))
+                    .align(Alignment.End)
             )
         }
     }
@@ -177,10 +191,15 @@ private fun ActionButton(
             Icon(
                 imageVector = Icons.Default.Check,
                 contentDescription = null,
-                modifier = Modifier.padding(end = 4.dp)
+                modifier = Modifier
+                    .testTag(screenTag("actionButton_icon"))
+                    .padding(end = 4.dp)
             )
         }
         val labelRes = if (toggled) R.string.action_button_toggled_label else R.string.action_button_untoggle_label
-        Text(text = stringResource(labelRes))
+        Text(
+            text = stringResource(labelRes),
+            modifier = Modifier.testTag(screenTag("actionButton_text"))
+        )
     }
 }
