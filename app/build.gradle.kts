@@ -80,8 +80,6 @@ dependencies {
     kapt(libs.dagger.compiler)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
-    testImplementation(libs.junit)
-
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
