@@ -32,4 +32,5 @@ include(
     ":core:db",
     ":common",
     ":features:details",
+    ":testutils",
 )

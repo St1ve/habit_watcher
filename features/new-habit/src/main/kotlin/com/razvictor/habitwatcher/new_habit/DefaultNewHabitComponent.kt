@@ -16,7 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class DefaultNewHabitComponent @AssistedInject internal constructor(
     @Assisted componentContext: ComponentContext,
@@ -24,7 +23,7 @@ class DefaultNewHabitComponent @AssistedInject internal constructor(
     private val habitRepository: HabitRepository,
 ) : NewHabitComponent, ComponentContext by componentContext {
 
-    private val retainedInstance = instanceKeeper.getOrCreate {
+    private val retainedInstance = instanceKeeper.getOrCreate<NewHabitRetainedInstance> {
         NewHabitRetainedInstance(habitRepository = habitRepository)
     }
     override val uiState: Value<NewHabitUiState> = retainedInstance.mUiState
