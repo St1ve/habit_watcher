@@ -26,7 +26,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.razvictor.habitwatcher.features.habitlist.impl.R
+import com.razvictor.habitwatcher.features.newhabit.R
 import com.razvictor.habitwatcher.new_habit.NewHabitUiState.FieldState
 
 const val SCREEN_PREFIX_TEST_TAG = "NewHabitContent"
