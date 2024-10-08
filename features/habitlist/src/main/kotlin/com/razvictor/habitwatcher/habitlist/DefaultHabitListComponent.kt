@@ -39,7 +39,6 @@ class DefaultHabitListComponent @AssistedInject internal constructor(
                 retainedInstance.mUiState.update { oldState -> oldState.copy(habits = habits.toUi()) }
             }
             .launchIn(scope)
-
     }
 
     override val uiState: Value<HabitListUiState> = retainedInstance.mUiState
