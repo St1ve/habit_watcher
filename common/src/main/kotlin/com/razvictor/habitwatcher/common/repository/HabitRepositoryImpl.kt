@@ -44,6 +44,15 @@ class HabitRepositoryImpl @Inject constructor(
         habitDao.resetCompletionHabit(habitId, date)
     }
 
+    override suspend fun toggleHabit(habitId: Long, date: LocalDate) {
+        val habit = habitDao.getHabit(habitId)
+        if (habit.datesCompleted.contains(date)) {
+            resetCompletionHabit(habitId, date)
+        } else {
+            completeHabit(habitId, date)
+        }
+    }
+
     override suspend fun completeHabit(habitId: Long, date: LocalDate) {
         val entity = DateCompletedEntity(
             habitId = habitId,

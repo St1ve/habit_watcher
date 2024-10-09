@@ -47,8 +47,8 @@ class DefaultHabitListComponent @AssistedInject internal constructor(
         onNewHabitClick.invoke()
     }
 
-    override fun onMarkHabitClick(id: Long, isDone: Boolean) {
-        retainedInstance.toggleHabitDone(habitId = id, isDone = isDone)
+    override fun onMarkHabitClick(id: Long) {
+        retainedInstance.toggleHabitDone(habitId = id)
     }
 
     override fun onCardClick(id: Long) {
@@ -71,14 +71,10 @@ internal class HabitListRetainedInstance(
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     val mUiState = MutableValue(HabitListUiState.DEFAULT)
 
-    fun toggleHabitDone(habitId: Long, isDone: Boolean) {
+    fun toggleHabitDone(habitId: Long) {
         scope.launch {
             val currentDate = LocalDate.now()
-            if (isDone) {
-                habitRepository.resetCompletionHabit(habitId, currentDate)
-            } else {
-                habitRepository.completeHabit(habitId, currentDate)
-            }
+            habitRepository.toggleHabit(habitId, currentDate)
         }
     }
 

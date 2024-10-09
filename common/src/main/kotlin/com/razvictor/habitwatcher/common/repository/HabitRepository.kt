@@ -12,4 +12,5 @@ interface HabitRepository {
     suspend fun editHabit(id: Long, name: String)
     suspend fun completeHabit(habitId: Long, date: LocalDate)
     suspend fun resetCompletionHabit(habitId: Long, date: LocalDate)
+    suspend fun toggleHabit(habitId: Long, date: LocalDate)
 }

@@ -9,7 +9,6 @@ import com.arkivanov.essenty.instancekeeper.getOrCreate
 import com.razvictor.habitwatcher.common.models.Habit
 import com.razvictor.habitwatcher.common.repository.HabitRepository
 import com.razvictor.habitwatcher.details.DetailsUiState.HeaderState
-import com.razvictor.habitwatcher.uikit.component.calendar.CalendarState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -63,17 +62,8 @@ class DefaultDetailsComponent @AssistedInject internal constructor(
     }
 
     override fun onCalendarCellClick(id: String) {
-        // FIXME: Fix this logic
-        val isDone = uiState.value.calendarState.gridState.weeks.find {
-            it.cells.find { cell ->
-                cell is CalendarState.GridState.WeekState.CellState.Data
-                    && cell.id == id
-                    && cell.backgroundAlpha > 0
-            } != null
-        } != null
         retainedInstance.toggleHabitDone(
             habitId = habitId,
-            isDone = isDone,
             dateCompletionStr = id,
         )
     }
@@ -122,14 +112,10 @@ internal class DetailsRetainedInstance(
         }
     }
 
-    fun toggleHabitDone(habitId: Long, isDone: Boolean, dateCompletionStr: String) {
+    fun toggleHabitDone(habitId: Long, dateCompletionStr: String) {
         scope.launch {
             val dateCompletion = LocalDate.parse(dateCompletionStr)
-            if (isDone) {
-                habitRepository.resetCompletionHabit(habitId, dateCompletion)
-            } else {
-                habitRepository.completeHabit(habitId, dateCompletion)
-            }
+            habitRepository.toggleHabit(habitId, dateCompletion)
         }
     }
 

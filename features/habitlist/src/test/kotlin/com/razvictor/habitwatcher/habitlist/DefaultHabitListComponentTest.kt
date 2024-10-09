@@ -69,22 +69,21 @@ internal class DefaultHabitListComponentTest(
     fun test_onMarkHabitClick() {
         /* Given */
         justRun {
-            retainedInstance.toggleHabitDone(any(), any())
+            retainedInstance.toggleHabitDone(any())
         }
         every {
             retainedInstance.mUiState
         } returns MutableValue(HabitListUiState.DEFAULT)
         val component = createComponent()
         val mockId = 123L
-        val mockIsDone = true
 
         /* When */
-        component.onMarkHabitClick(mockId, mockIsDone)
+        component.onMarkHabitClick(mockId)
 
         /* Then */
         verifySequence {
             retainedInstance.mUiState
-            retainedInstance.toggleHabitDone(mockId, mockIsDone)
+            retainedInstance.toggleHabitDone(mockId)
         }
     }
 

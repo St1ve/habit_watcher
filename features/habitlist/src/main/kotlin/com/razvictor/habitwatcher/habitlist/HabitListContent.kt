@@ -115,7 +115,7 @@ private fun HabitList(
     fabNestedScrollConnection: NestedScrollConnection,
     habits: List<HabitUiState>,
     onCardClick: (Long) -> Unit,
-    onToggleClick: (Long, Boolean) -> Unit,
+    onToggleClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -133,7 +133,7 @@ private fun HabitList(
             HabitCard(
                 habitState = habit,
                 onCardClick = { onCardClick(habit.id) },
-                onActionToggle = { onToggleClick(habit.id, habit.isDone) }
+                onActionToggle = { onToggleClick(habit.id) }
             )
         }
     }

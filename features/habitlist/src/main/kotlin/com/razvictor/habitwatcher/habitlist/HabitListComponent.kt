@@ -8,7 +8,7 @@ interface HabitListComponent {
     val uiState: Value<HabitListUiState>
 
     fun onNewHabitClick()
-    fun onMarkHabitClick(id: Long, isDone: Boolean)
+    fun onMarkHabitClick(id: Long)
     fun onCardClick(id: Long)
 
     fun interface Factory {

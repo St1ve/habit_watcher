@@ -37,6 +37,17 @@ interface HabitDao {
     )
     fun listenHabit(habitId: Long) : Flow<HabitDb>
 
+    @Query(
+        """
+            SELECT habits.id, habits.name, GROUP_CONCAT(dates.date) AS datesCompleted
+            FROM habits
+            LEFT JOIN date_completed AS dates ON habits.id = dates.habitId
+            WHERE habits.id = :habitId
+            GROUP BY habits.id
+        """
+    )
+    suspend fun getHabit(habitId: Long) : HabitDb
+
     @Query("DELETE FROM habits WHERE id = :id")
     suspend fun deleteHabit(id: Long)
 
