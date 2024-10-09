@@ -2,8 +2,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.ksp)
     id("kotlin-kapt")
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -42,10 +42,15 @@ android {
     kotlinOptions {
         jvmTarget = libs.versions.jvmTarget.get()
     }
+    tasks.withType<Test> {
+        useJUnitPlatform()
+    }
 }
 
 dependencies {
     implementation(project(":core:db"))
+
+    testImplementation(project(":testutils"))
 
     implementation(libs.room.runtime)
     implementation(libs.room.coroutines)
@@ -54,4 +59,8 @@ dependencies {
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
+
+    testImplementation(libs.mockk)
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.kotlinx.coroutines.test)
 }
