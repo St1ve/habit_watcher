@@ -42,12 +42,16 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtensionVersion.get()
     }
+    tasks.withType<Test> {
+        useJUnitPlatform()
+    }
 }
 
 dependencies {
     implementation(project(":core:db"))
     implementation(project(":common"))
     implementation(project(":core:uikit"))
+    testImplementation(project(":testutils"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
@@ -68,4 +72,7 @@ dependencies {
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    testImplementation(libs.mockk)
+    testImplementation(libs.junit.jupiter)
 }
